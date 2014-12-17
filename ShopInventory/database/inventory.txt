@@ -1,0 +1,8 @@
+
+0 Sugar Dabar 10 5
+1 Coco Dabar 5 2
+2 Peas Tata 20 4
+3 Meat McD 10 0
+4 Chicken KFC 20 3
+5 Roti Home 30 5
+7 Honey Dabar 10 3

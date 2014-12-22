@@ -1,0 +1,1 @@
+{"@name":"XXXX","@price":10,"@stock":3,"@company":"XXXX","@id":1}

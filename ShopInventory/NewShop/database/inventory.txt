@@ -1,1 +1,4 @@
-{"@name":"XXXX","@price":10,"@stock":3,"@company":"XXXX","@id":1}
+{"@name":"Meat","@price":20,"@stock":2,"@company":"YYYY","@id":2}
+{"@name":"Honey","@price":20,"@stock":1,"@company":"Honeywell","@id":3}
+{"@name":"Chicken","@price":30,"@stock":3,"@company":"XXXX","@id":4}
+{"@name":"Bla Bla","@price":100,"@stock":5,"@company":"ZZZZ","@id":5}

@@ -80,7 +80,7 @@ class Product
   extend DisplayDBContent
   DB_PATH = 'database/inventory.txt'
   ID_PATH = 'database/inventory_id.txt'
-  attr_writer :id
+  attr_accessor :id, :stock
   def initialize(args = {})
     args.each do |instance_var, instance_val|
       instance_variable_set("@#{instance_var}", instance_val)
@@ -96,7 +96,7 @@ class Order
   extend DisplayDBContent
   DB_PATH = 'database/order.txt'
   ID_PATH = 'database/order_id.txt'
-  attr_writer :id
+  attr_accessor :id
   def initialize(args = {})
     args.each do |instance_var, instance_val|
       instance_variable_set("@#{instance_var}", instance_val)
@@ -106,7 +106,7 @@ end
 
 class User; end
 
-# Shopkeeper is a User Add, Remove, List,Edit & Search
+# Shopkeeper is a User Add, Remove, List,Edit & Search products
 class ShopKeeper < User
   def add_product
     puts 'Enter Product Name:'
@@ -119,10 +119,84 @@ class ShopKeeper < User
     company = gets.chomp
     input_hash = { name: name, price: price, stock: stock, company: company }
     product = Product.new(input_hash)
-    product_obj.set_id
+    product.set_id
     product.save
   end
+
+  def remove_product
+    puts 'Enter ID of Product to REMOVE :'
+    id = gets.chomp.to_i
+    product_obj = Product.new
+    product_obj.search_object!(id)
+    product_obj.remove_object
+  end
+
+  def edit_product
+    puts 'Enter ID of Product to EDIT :'
+    id = gets.chomp.to_i
+    puts 'Enter Product Name:'
+    name = gets.chomp
+    puts 'Enter Product Price:'
+    price = gets.chomp.to_i
+    puts 'Enter Number of Stock items:'
+    stock = gets.chomp.to_i
+    puts 'Enter Product Company:'
+    company = gets.chomp
+    product_obj = Product.new
+    product_obj.search_object!(id)
+    hash = { name: name, price: price, stock: stock, company: company }
+    product_obj.update_object(hash)
+  end
+
+  def display_products
+    Product.display
+  end
 end
+
+# Customer is a User who can  List, Buy & Search products
+class Customer < User
+  def buy_product
+    puts 'Enter ID of Product to Buy :'
+    id = gets.chomp.to_i
+    product = Product.new
+    exist_flag = product.search_object!(id)
+
+    if exist_flag
+      stock = product.stock
+      if stock > 0
+        stock -= 1
+        product.update_object(stock: stock)
+        puts 'Enter Transaction Detail'
+        puts 'Enter Your Name :'
+        c_name = gets.chomp
+        puts 'Enter Card Number :'
+        card = gets.chomp.to_i
+        puts 'Enter CVV code :'
+        cvv = gets.chomp.to_i
+        hash = { c_name: c_name, p_id: id, card_no: card, cvv: cvv, id: 0 }
+        order = Order.new(hash)
+        order.set_id
+        order.save
+      else
+        puts 'Product Out of stock'
+      end
+    else
+      puts 'Product Not Found'
+    end
+  end
+
+  def display_products
+    Product.display
+  end
+end
+
+# Code to buy product
+customer = Customer.new
+customer.buy_product
+
+# Code to add products to DB
+# shopkeeper = ShopKeeper.new
+# shopkeeper.add_product
 
 # Code to list DataBase contents
 # Product.display

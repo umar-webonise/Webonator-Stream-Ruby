@@ -51,6 +51,25 @@ module ObjectFileHandler
     contents = contents.gsub(/.*"@id":#{@id}\}/, to_json)
     File.open(self.class::DB_PATH, 'w') { |file| file.puts contents }
   end
+
+  def to_s_object
+    object_string = "#{self.class}:: "
+    instance_variables.each do |var|
+      object_string = "#{object_string}#{instance_variable_get(var)}: "
+    end
+    object_string
+  end
+end
+
+# Display contents of DB
+module DisplayDBContent
+  def display
+    product_obj = new
+    File.readlines(self::DB_PATH).each do |lines|
+      product_obj.from_json!(lines)
+      puts product_obj.to_s_object
+    end
+  end
 end
 
 # To create Product Object
@@ -58,6 +77,7 @@ end
 class Product
   include JSONable
   include ObjectFileHandler
+  extend DisplayDBContent
   DB_PATH = 'database/inventory.txt'
   ID_PATH = 'database/inventory_id.txt'
   attr_writer :id
@@ -73,6 +93,7 @@ end
 class Order
   include JSONable
   include ObjectFileHandler
+  extend DisplayDBContent
   DB_PATH = 'database/order.txt'
   ID_PATH = 'database/order_id.txt'
   attr_writer :id
@@ -84,6 +105,32 @@ class Order
 end
 
 class User; end
+
+# Shopkeeper is a User Add, Remove, List,Edit & Search
+class ShopKeeper < User
+  def add_product
+    puts 'Enter Product Name:'
+    name = gets.chomp
+    puts 'Enter Product Price:'
+    price = gets.chomp.to_i
+    puts 'Enter Number of Stock items:'
+    stock = gets.chomp.to_i
+    puts 'Enter Product Company:'
+    company = gets.chomp
+    input_hash = { name: name, price: price, stock: stock, company: company }
+    product = Product.new(input_hash)
+    product_obj.set_id
+    product.save
+  end
+end
+
+# Code to list DataBase contents
+# Product.display
+
+# Code to display Object
+# product_obj = Product.new
+# product_obj.search_object!(2)
+# puts product_obj.to_s_object
 
 # Code to update Product details return object
 # product_obj = Product.new

@@ -18,6 +18,12 @@ class ShopKeeper < User
         4 => method(:edit_product),
         5 => method(:remove_product)
       }
+      instance_eval do
+        def default_option
+          puts 'Invalid Input'
+        end
+      end
+      option.default = method(:default_option)
       option[choice].call
       puts 'Do you want to continue y/n?'
       continue_choice = gets.chomp.to_s

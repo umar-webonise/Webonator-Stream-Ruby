@@ -17,6 +17,12 @@ class Customer < User
         2 => method(:display_products),
         3 => method(:buy_product)
       }
+      instance_eval do
+        def default_option
+          puts 'Invalid Input'
+        end
+      end
+      option.default = method(:default_option)
       option[choice].call
       puts 'Do you want to continue y/n?'
       continue_choice = gets.chomp.to_s

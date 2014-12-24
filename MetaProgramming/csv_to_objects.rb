@@ -7,6 +7,7 @@ module CsvConverterObject
     class_name = file_name.split(/_/).map(&:capitalize)
     class_name = class_name.join
     csv_class = Object.const_set(class_name, Class.new)
+    objectz = []
     options = { headers: true, header_converters: :symbol, converters: :all }
     CSV.foreach(file, options) do |row|
       csv_object = csv_class.new
@@ -15,10 +16,14 @@ module CsvConverterObject
         csv_class.class_eval { attr_accessor instance_var }
         csv_object.instance_variable_set("@#{instance_var}", instance_vals)
       end
-      puts '---------------------------------------------------------------'
-      puts csv_object.inspect
+      objectz.push(csv_object)
     end
+    objectz
   end
 end
 
-CsvConverterObject.convert('user_details.csv')
+object_array = CsvConverterObject.convert('user_details.csv')
+object_array.each do |object|
+  puts '--------------------------------------------------------------------'
+  puts object.inspect
+end

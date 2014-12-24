@@ -34,19 +34,17 @@ class Graph
   end
 
   def genarate_links
-    add_link = proc do |args = {}, vertex|
-      row = vertex.row + args[:row]
-      col = vertex.col + args[:col]
-      if row >= 0 && row < @vert_list.length \
-        && col >= 0 && col < @vert_list[0].length
-        vertex.links.push(@vert_list[row][col])
-        vertex.succesors += 1
-      end
-    end
     @vert_list.each do |vertex_row|
       vertex_row.each do |vertex|
         MOVES_MANU.each do |move_manu|
-          add_link.call(move_manu, vertex)
+          row = vertex.row + move_manu[:row]
+          col = vertex.col + move_manu[:col]
+          if row >= 0 && row < @vert_list.length && \
+             col >= 0 && col < @vert_list[0].length
+            vertex.links.push(@vert_list[row][col])
+            vertex.succesors += 1
+          end
+          next
         end
       end
     end
@@ -108,7 +106,7 @@ end # ----Lambda End
 
 graph = Graph.new
 
-graph.genarate_vertices 8, 8
+graph.genarate_vertices 5, 5
 
 graph.genarate_links
 

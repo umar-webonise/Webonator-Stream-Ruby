@@ -22,7 +22,7 @@ module CsvConverterObject
   end
 end
 
-object_array = CsvConverterObject.convert('user_details.csv')
+object_array = CsvConverterObject.convert('vehicle_report.csv')
 object_array.each do |object|
   puts '--------------------------------------------------------------------'
   puts object.inspect
